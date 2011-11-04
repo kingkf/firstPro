@@ -1,0 +1,30 @@
+一期目标：抓取美团网上的所有团购以及每个团购的详细信息，用规范的数据表格存储好。
+二期目标：抓取所有主要团购网站上的团购数据，并作对应的数据分析，得出行业的现状和趋势。
+三期目标：把抓取的这些团购信息放到一个手机应用里，并根据地理位置信息向用户推送推荐。
+
+
+一期具体需求：针对每个团购，获取它的以下信息，并建立数据库表存储起来
+
+    标题-Name； <title>这里有标题</title>$
+    商区-Region（详细标题里用【】包含的内容，例如【西直门】或【多商区】）；第一个<h1>后面到第二个"】"的内容$
+    价格-Price；第一个￥后的空格后跟的数字$
+    原价-Original_Price；第二个￥后跟的数字$
+    折扣-Discount；这个我不知道怎么取。。。$
+    让利额-Saved_Money；第三个￥后跟的数字$
+    团购持续时间-Time_Length；不知道能不能取到，试试吧，假设脚本可以连续跑一个月
+    已购买人数-Sold_Number；这个p里的数字：<p class="deal-buy-tip-top"><strong>1305</strong> 人已购买</p>$
+    是否支持7天无条件退款-Seven_Or_Not；http://www.meituan.com/commitment#seven 后面的第一个汉字字符（支/不）sevenOrNot==1(支持) sevenOrNot==0(不支持)$
+    是否支持未消费退款-Expire_Or_Not；http://www.meituan.com/commitment#expire 后面的前三个字符（支/不）expireOrNot==1    expireOrNot==0$
+    提示-Tips; <li class="col first">这里是提示</li>$
+    亮点-Greatness；<li class="col">这里是亮点</li>$
+    有效期长度-Valid_Time（例如2011年10月11日到2011年12月11日，则有效期为31天）；<li>有效期 2011.10.8 至 2011.11.23</li>，不知道肿么搞$
+    商家经度-Location_Longitude；http://ditu.google.cn/maps/ms?msid=213599906217407540980.0004aeb07cef9a558239d&msa=0&ll=39.859534,116.424973&spn=0.008022,0.021136
+    商家纬度-Location_Latitude；同上
+    商家电话-Service_Phone; 第一个“联系电话：空格”后跟的一串由“-”隔开的数字。
+    商家网站-Service_Website；第一个“官方网站：空格”后跟的一串网址。
+    交通指南-Visit_Guide；<li class="traffic">这里是交通指南</li>
+    团购示例图-Main_Image(紧跟在标题下面的那张图片)； <div class="deal-buy-cover-img"><img src="http://p0.meituan.net/deal/201110/07/30002.jpg"/></div> 取这个Div里的图片$
+    详情-Detail；<div class="mainbox cf">这里是详情</div> 详情包括文字和图片
+
+
+ps：不好抓取的数据可以采用人工输入的形式   
