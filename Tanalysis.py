@@ -4,6 +4,11 @@
 import mechanize
 import re
 from BeautifulSoup import BeautifulSoup
+import sqlite3
+
+ID = 1
+searchnumber = 1
+
 def scrapeLinks(baseUrl,data):
     soup = BeautifulSoup(data)
     links=[]
@@ -39,6 +44,7 @@ def scrapeContents(data):
     for item in re.findall(r"[0-9]+\.?[0-9]*",str(temp[0].contents[3].contents[1].contents[0].string)):
         originalPrice = float(item)
     print  "原始价格: "+str(originalPrice)
+    print type(originalPrice)
 
     discount = 0
     for item in re.findall(r"[0-9]+\.?[0-9]*",str(temp[0].contents[3].contents[3].contents[0].string)):
@@ -49,6 +55,7 @@ def scrapeContents(data):
     for item in re.findall(r"[0-9]+\.?[0-9]*",str(temp[0].contents[3].contents[5].contents[0].string)): 
         saveMoney = float(item)
     print "saveMoney: "+str(saveMoney)
+    print type(saveMoney)
 
     
     soldout = 0 #mei mai wan
@@ -138,6 +145,7 @@ def scrapeContents(data):
     print "tips:"
     for i in tips:
         print i
+    strtips = ','.join(tips)
 
     temp = soup.findAll(attrs={"class":"col"})
     greatness = []
@@ -147,6 +155,7 @@ def scrapeContents(data):
     print "greatness:"
     for i in greatness:
         print i
+    strgreatness = ','.join(greatness)
 
     temp = soup.findAll(attrs={"class":"deal-buy-cover-img"})
     s = str(temp[0].contents[0])
@@ -166,6 +175,16 @@ def scrapeContents(data):
 
 
     print ""
+
+    conn = sqlite3.connect('meituan.db')
+    c = conn.cursor()
+    c.execute("insert into stocks\
+    values(%d, %d, ?, ?, %f, %f, %f,\
+    %f, %d, %d, %d, ?, ?, ?, ?, ?)" % (searchnumber,ID,name,region,price,originalPrice,discount,saveMoney,soldNumber,sevenOrNot,expireOrNot,validStartTime,validEndTime,tips,greatness,mainImage))
+    conn.commit()
+    c.close()
+    
+
 
     
 
