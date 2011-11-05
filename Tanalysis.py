@@ -27,10 +27,12 @@ def scrapeContents(data):
     soup = BeautifulSoup(data)
     name = soup.findAll('h1')[0].string
     print name
+    print type(name)
     region = ""
     for item in re.findall(r"【(.*?)】",str(name)):
         region = item
     print region
+    print type(region)
 
     price = 0
     temp = soup.findAll('p',attrs={"class":"deal-price"})
@@ -140,22 +142,28 @@ def scrapeContents(data):
     #tips.append(temp[0].contents[3].contents[6].string)
     #tips.append(temp[0].contents[3].contents[8].string)
     for content in temp[0].contents[3].contents:
-        if str(content.string) != "\n":
+        if str(content.string) != "\n" and content.string != None:
+            print content.string
             tips.append(content.string)
     print "tips:"
     for i in tips:
         print i
     strtips = ','.join(tips)
+    strtips = strtips.encode('utf8')
+    print type(strtips)
+    print strtips
 
     temp = soup.findAll(attrs={"class":"col"})
     greatness = []
     for content in temp[0].contents[3]:
-        if str(content.string) != "\n":
-            greatness.append(str(content.string))
+        if str(content.string) != "\n" and content.string != None:
+            greatness.append(content.string)
     print "greatness:"
     for i in greatness:
         print i
     strgreatness = ','.join(greatness)
+    strgreatness = strgreatness.encode('utf8')
+    print type(strgreatness)
 
     temp = soup.findAll(attrs={"class":"deal-buy-cover-img"})
     s = str(temp[0].contents[0])
@@ -178,9 +186,27 @@ def scrapeContents(data):
 
     conn = sqlite3.connect('meituan.db')
     c = conn.cursor()
-    c.execute("insert into stocks\
-    values(%d, %d, ?, ?, %f, %f, %f,\
-    %f, %d, %d, %d, ?, ?, ?, ?, ?)" % (searchnumber,ID,name,region,price,originalPrice,discount,saveMoney,soldNumber,sevenOrNot,expireOrNot,validStartTime,validEndTime,tips,greatness,mainImage))
+    """c.execute("insert into stocks(searchnumber,id,name,region,price,originalPrice,discount,saveMoney,soldNumber,sevenOrNot,expireOrNot,validStartTime,validEndTime,tips,greatness,mainImage)\
+    values('%d', '%d', '%s', '%s', '%f', '%f', '%f',\
+    '%f', '%d', '%d', '%d', '%s', '%s', '%s', '%s', '%s')" % (searchnumber,ID,name,region,price,originalPrice,discount,saveMoney,soldNumber,sevenOrNot,expireOrNot,validStartTime,validEndTime,strtips,strgreatness,mainImage))"""
+    c.execute("insert into stocks(searchnumber,id,region,name) values('%d','%d','%s','%s')" % (searchnumber,ID,region,name))
+    #c.execute("insert into stocks(id) values('%d')" % ID)
+    #c.execute("insert into stocks(name) values('%s')" % name)
+    #c.execute("insert into stocks(region) values('%s')" % region)
+    #c.execute("insert into stocks(price) values('%f')" % price)
+    #c.execute("insert into stocks(originalPrice) values('%f')" % originalPrice)
+    #c.execute("insert into stocks(discount) values('%f')" % discount)
+    #c.execute("insert into stocks(saveMoney) values('%f')" % saveMoney)
+    #c.execute("insert into stocks(soldNumber) values('%d')" % soldNumber)
+    #c.execute("insert into stocks(sevenOrNot) values('%d')" % sevenOrNot)
+    #c.execute("insert into stocks(expireOrNot) values('%d')" % expireOrNot)
+    #c.execute("insert into stocks(validStartTime) values('%s')" % validStartTime)
+    #c.execute("insert into stocks(validEndTime) values('%s')" % validEndTime)
+    #c.execute("insert into stocks(tips) values('%s')" % strtips)
+    #c.execute("insert into stocks(greatness) values('%s')" % strgreatness)
+    #c.execute("insert into stocks(mainImage) values('%s')" % mainImage)
+
+    
     conn.commit()
     c.close()
     

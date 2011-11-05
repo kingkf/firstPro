@@ -12,7 +12,7 @@ def createdb():
     saveMoney REAL, soldNumber INTEGER,
     sevenOrNot INTEGER, expireOrNot INTEGER,
     validStartTime TEXT, validEndTime TEXT,
-    tips column, greatness column, mainImage TEXT)''')
+    tips TEXT, greatness TEXT, mainImage TEXT)''')
     conn.commit()
     c.close()
 
