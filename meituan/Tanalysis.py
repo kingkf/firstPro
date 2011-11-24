@@ -1,16 +1,13 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import os,sys
-sys.path.insert(0,os.path.abspath(os.curdir))
-from django.core.management import setup_environ
-import settings
-setup_environ(settings)
 import mechanize
 import re
 from BeautifulSoup import BeautifulSoup
 import sqlite3
-from meituan.models import MeituanInfo
+import os
+os.environ['DJANGO_SETTINGS_MODULE'] = "fetch.settings"
+from models import MeituanInfo
 
 #ID = 1
 #searchnumber = 1
@@ -216,8 +213,7 @@ def scrapeContents(data):
     
     #conn.commit()
     #c.close()
-    m = MeituanInfo(name=name,region=region,price=price,originalPrice=originalPrice,discount=discount,saveMoney=saveMoney,soldNumber=soldNumber,sevenOrNot=sevenOrNot,expireOrNot=expireOrNot,validStartTime=validStartTime,validEndTime=validEndTime,tips=tips,greatness=greatness,mainImage=mainImage)
-    m.save()
+    m = MeituanInfo(name,region,price,originalPrice,discount,saveMoney,soldNumber,sevenOrNot,expireOrNot,validStartTime,validEndTime,tips,greatness,mainImage)
 
 
 def main():
